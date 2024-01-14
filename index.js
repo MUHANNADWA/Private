@@ -3,23 +3,25 @@ require('dotenv').config();
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
-const mainMenuStrings = ['محاضرات السنة الثانية 2023-2024',
+const mainMenuStrings = [
+    'محاضرات السنة الثانية 2023-2024',
     'محاضرات السنة الماضية',
     'الإبلاغ عن مشكلة'
-]
+];
+
+const subjectMenuStrings = [
+    'تحليل 3',
+    'إنجليزي 3',
+    'خوارزميات 1',
+    'دارات منطقية',
+    'برمجة 3',
+    'احتمالات',
+    'عودة إلى القائمة السابقة'
+];
 
 const mainMenu = mainMenuStrings.map((x) => [{ text: x }]);
 
-console.log(mainMenu);
-const subjectMenu = [
-    [{ text: 'تحليل 3' }],
-    [{ text: 'إنجليزي 3' }],
-    [{ text: 'خوارزميات 1' }],
-    [{ text: 'دارات منطقية' }],
-    [{ text: 'برمجة 3' }],
-    [{ text: 'احتمالات' }],
-    [{ text: 'عودة إلى القائمة السابقة' }]
-];
+const subjectMenu = subjectMenuStrings.map((x) => [{ text: x }]);
 
 const userStates = new Map();
 
