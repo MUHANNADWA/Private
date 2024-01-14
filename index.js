@@ -27,8 +27,9 @@ const userStates = new Map();
 
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
+    const username = msg.from.username;
     userStates.set(chatId, 'mainMenu');
-    bot.sendMessage(chatId, 'أهلا وسهلا');
+    bot.sendMessage(chatId, `أهلا وسهلا @${username}!`);
     bot.sendMessage(chatId, 'اختر أحد الخيارات التالية:', {
         reply_markup: {
             keyboard: mainMenu,
@@ -60,7 +61,13 @@ bot.on('message', (msg) => {
             }
         })
     } else if (msg.text === 'محاضرات السنة الماضية') {
-        bot.sendMessage(chatId, 'قريبا...');
+        bot.sendMessage(chatId, 'اختر أحد الخيارات التالية:', {
+            reply_markup: {
+                keyboard: mainMenu,
+                resize_keyboard: true,
+                one_time_keyboard: true
+            }
+        })
     }
     else if (msg.text === 'الإبلاغ عن مشكلة') {
         bot.sendMessage(chatId, 'قريبا...');
