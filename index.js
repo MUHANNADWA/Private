@@ -63,7 +63,7 @@ bot.on('message', (msg) => {
     } else if (msg.text === 'محاضرات السنة الماضية') {
         bot.sendMessage(chatId, 'اختر أحد الخيارات التالية:', {
             reply_markup: {
-                keyboard: mainMenu,
+                keyboard: subjectMenu,
                 resize_keyboard: true,
                 one_time_keyboard: true
             }
