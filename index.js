@@ -3,12 +3,14 @@ require('dotenv').config();
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
-const mainMenu = [
-    [{ text: 'محاضرات السنة الثانية 2023-2024' }],
-    [{ text: 'محاضرات السنة الماضية' }],
-    [{ text: 'الإبلاغ عن مشكلة' }]
-];
+const mainMenuStrings = ['محاضرات السنة الثانية 2023-2024',
+    'محاضرات السنة الماضية',
+    'الإبلاغ عن مشكلة'
+]
 
+const mainMenu = mainMenuStrings.map((x) => [{ text: x }]);
+
+console.log(mainMenu);
 const subjectMenu = [
     [{ text: 'تحليل 3' }],
     [{ text: 'إنجليزي 3' }],
@@ -37,7 +39,7 @@ bot.onText(/\/start/, (msg) => {
 bot.on('message', (msg) => {
     const chatId = msg.chat.id;
 
-    if (msg.text === 'محاضرات السنة الثانية 2023-2024') {
+    if (msg.text === mainMenuStrings[0]) {
         userStates.set(chatId, 'subjectMenu');
         bot.sendMessage(chatId, 'اختر المادة: ', {
             reply_markup: {
