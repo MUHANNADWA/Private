@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
+const keep_alive = require('./keep_alive.js')
 
 const mainMenuStrings = [
     'محاضرات السنة الثانية 2023-2024',
@@ -37,6 +38,14 @@ bot.onText(/\/start/, (msg) => {
             one_time_keyboard: true
         }
     });
+});
+
+// Listen for user messages
+bot.onText(/\/forward (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const userMessage = match[1]; // The captured message after /forward command
+    // Forward the user's message to the developer
+    bot.sendMessage(developerChatId, `User ${chatId} says: ${userMessage}`);
 });
 
 bot.on('message', (msg) => {
