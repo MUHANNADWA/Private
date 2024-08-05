@@ -30,7 +30,6 @@ const mainMenu = {
     reply_markup: JSON.stringify({
         keyboard: mainMenuStrings.map((x) => [{ text: x }]),
         resize_keyboard: true,
-        one_time_keyboard: true,
     }),
 };
 
@@ -38,7 +37,6 @@ const subjectMenu = {
     reply_markup: JSON.stringify({
         keyboard: subjectMenuStrings.map((x) => [{ text: x }]),
         resize_keyboard: true,
-        one_time_keyboard: true,
     }),
 };
 
@@ -46,7 +44,6 @@ const subsubjectMenu = {
     reply_markup: JSON.stringify({
         keyboard: subsubjectMenuStrings.map((x) => [{ text: x }]),
         resize_keyboard: true,
-        one_time_keyboard: true,
     }),
 };
 
