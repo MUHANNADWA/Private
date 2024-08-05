@@ -105,6 +105,7 @@ const express = require('express');
 //     }
 // });
 
+
 // Handle the /start command
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
@@ -125,11 +126,25 @@ bot.on('message', async (msg) => {
 
             bot.sendMessage(chatId, `Downloading video: ${title}`);
 
+            // Debugging: Check stream size before sending
+            let videoSize = 0;
+            videoStream.on('data', chunk => {
+                videoSize += chunk.length;
+            });
+
+            videoStream.on('end', () => {
+                console.log(`Video size: ${videoSize} bytes`);
+                if (videoSize > 50 * 1024 * 1024) {
+                    bot.sendMessage(chatId, "Sorry, the video is too large to be sent.");
+                }
+            });
+
             // Send the video file to the user
-            bot.sendVideo(chatId, videoStream, {
+            await bot.sendVideo(chatId, videoStream, {
                 caption: `Here's your video: ${title}`,
             });
         } catch (error) {
+            console.error("Error while processing the video:", error.message);
             bot.sendMessage(chatId, `Failed to download video: ${error.message}`);
         }
     } else {
