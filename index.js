@@ -100,6 +100,10 @@ bot.on("message", (msg) => {
         bot.sendMessage(chatId, "اختر القسم", subsubjectMenu);
     } else if (msg.text === "الإبلاغ عن مشكلة") {
         bot.sendMessage(chatId, reportMessage, mainMenu);
+    } else if (msg.text === "الإبلاغ عن راسك") {
+        bot.sendMessage(chatId, "راسك وبس هههه", mainMenu);
+    } else {
+        bot.sendMessage(chatId, "مافي هيك شي للأسف", mainMenu);
     }
 });
 
