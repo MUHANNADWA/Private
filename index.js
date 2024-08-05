@@ -53,7 +53,7 @@ const keep_alive = require("./keep_alive.js");
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     const username = msg.from.username;
-    userStates.set(chatId, "mainMenu");
+    // userStates.set(chatId, "mainMenu");
     bot.sendMessage(chatId, `أهلا وسهلا @${username}`);
     // bot.sendMessage(chatId, "اختر أحد الخيارات التالية:", mainMenu);
 });
