@@ -7,7 +7,7 @@ const bot = new TelegramBot(token, { polling: true });
 const keep_alive = require("./keep_alive.js");
 const weatherApiKey = process.env.WEATHER_API_KEY;
 
-bot.onText(/\/start (.+)/, async (msg) => {
+bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     await bot.sendMessage(chatId, 'welcome jiji use the command (/weather city) to show its weather, this is an example:');
     await bot.sendMessage(chatId, '/weather damascus');
