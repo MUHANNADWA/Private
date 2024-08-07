@@ -5,8 +5,13 @@ const token = process.env.TELEGRAM_TOKEN;
 const developerChatId = process.env.DEVELOPER_CHAT_ID;
 const bot = new TelegramBot(token, { polling: true });
 const keep_alive = require("./keep_alive.js");
+const weatherApiKey = process.env.WEATHER_API_KEY;
 
-const weatherApiKey = 'e26d411871856684cdb2e6b749019386';
+bot.onText(/\/start (.+)/, async (msg) => {
+    const chatId = msg.chat.id;
+    await bot.sendMessage(chatId, 'welcome jiji use the command (/weather city) to show its weather, this is an example:');
+    await bot.sendMessage(chatId, '/weather damascus');
+});
 
 bot.onText(/\/weather (.+)/, async (msg, match) => {
     const chatId = msg.chat.id;
