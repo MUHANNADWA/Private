@@ -13,6 +13,7 @@
     "available-typed-arrays": "^1.0.5",
     "aws-sign2": "^0.7.0",
     "aws4": "^1.12.0",
+    "axios": "^1.7.3",
     "bcrypt-pbkdf": "^1.0.2",
     "bl": "^1.2.3",
     "bluebird": "^3.7.2",
