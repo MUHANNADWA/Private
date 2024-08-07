@@ -53,14 +53,14 @@ const subsubjectMenu = {
 
 const userStates = new Map();
 
-bot.onText(/\/start/, async (msg) => {
+bot.onText(/\/start/, async (_msg) => {
     userStates.set(chatId, "mainMenu");
     await bot.sendMessage(chatId, `أهلا وسهلا @${username}`);
     await bot.sendMessage(chatId, "اختر أحد الخيارات التالية:", mainMenu);
 });
 
 // Listen for user messages
-bot.onText(/\/report (.+)/, (msg, match) => {
+bot.onText(/\/report (.+)/, (_msg, match) => {
     const userMessage = match[1];
     bot.sendMessage(
         developerChatId,
