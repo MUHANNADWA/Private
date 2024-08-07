@@ -5,9 +5,6 @@ const developerChatId = process.env.DEVELOPER_CHAT_ID;
 const bot = new TelegramBot(token, { polling: true });
 const keep_alive = require("./keep_alive.js");
 
-const chatId = msg.chat.id;
-const username = msg.from.username;
-
 const mainMenuStrings = [
     "محاضرات السنة الثانية 2023-2024",
     "محاضرات السنة الماضية",
@@ -53,14 +50,18 @@ const subsubjectMenu = {
 
 const userStates = new Map();
 
-bot.onText(/\/start/, async (_msg) => {
+bot.onText(/\/start/, async (msg) => {
+    const chatId = msg.chat.id;
+    const username = msg.from.username;
     userStates.set(chatId, "mainMenu");
     await bot.sendMessage(chatId, `أهلا وسهلا @${username}`);
     await bot.sendMessage(chatId, "اختر أحد الخيارات التالية:", mainMenu);
 });
 
 // Listen for user messages
-bot.onText(/\/report (.+)/, (_msg, match) => {
+bot.onText(/\/report (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const username = msg.from.username;
     const userMessage = match[1];
     bot.sendMessage(
         developerChatId,
@@ -74,6 +75,8 @@ ${userMessage}`,
 });
 
 bot.on("message", (msg) => {
+    const chatId = msg.chat.id;
+
     if (msg.text === mainMenuStrings[0]) {
         userStates.set(chatId, "subjectMenu");
         bot.sendMessage(chatId, "اختر المادة: ", subjectMenu);
