@@ -51,6 +51,7 @@
     "get-symbol-description": "^1.0.0",
     "getpass": "^0.1.7",
     "globalthis": "^1.0.3",
+    "googleapis": "^140.0.1",
     "gopd": "^1.0.1",
     "has-bigints": "^1.0.2",
     "has-property-descriptors": "^1.0.1",

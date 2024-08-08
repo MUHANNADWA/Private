@@ -1,5 +1,7 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require('axios');
+const { google } = require('googleapis');
+const youtube = google.youtube('v3');
 require("dotenv").config();
 const token = process.env.TELEGRAM_TOKEN;
 const developerChatId = process.env.DEVELOPER_CHAT_ID;
