@@ -6,6 +6,7 @@ const developerChatId = process.env.DEVELOPER_CHAT_ID;
 const bot = new TelegramBot(token, { polling: true });
 const keep_alive = require("./keep_alive.js");
 const weatherApiKey = process.env.WEATHER_API_KEY;
+const API_KEY = process.env.YOUTUBE_API_KEY;
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
@@ -26,6 +27,30 @@ bot.onText(/\/weather (.+)/, async (msg, match) => {
         bot.sendMessage(chatId, 'Sorry, I couldn\'t fetch the weather data.');
     }
 });
+
+bot.onText(/\/search (.+)/, async (msg, match) => {
+    const chatId = msg.chat.id;
+    const query = match[1];
+
+    const response = await youtube.search.list({
+        key: API_KEY,
+        part: 'snippet',
+        q: query,
+        maxResults: 3,
+    });
+
+    const videos = response.data.items;
+    let message = 'Top results:\n';
+    videos.forEach(video => {
+        const title = video.snippet.title;
+        const videoId = video.id.videoId;
+        const url = `https://www.youtube.com/watch?v=${videoId}`;
+        message += `${title}: ${url}\n`;
+    });
+
+    bot.sendMessage(chatId, message);
+});
+
 
 // const mainMenuStrings = [
 //     "محاضرات السنة الثانية 2023-2024",
