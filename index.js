@@ -38,16 +38,17 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
         key: API_KEY,
         part: 'snippet',
         q: query,
-        maxResults: 3,
+        maxResults: 10,
     });
 
     const videos = response.data.items;
-    let message = 'Top results:\n';
+    let videoNumber = 0;
+    let message = 'Top results:\n\n';
     videos.forEach(video => {
         const title = video.snippet.title;
         const videoId = video.id.videoId;
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        message += `${title}: ${url}\n`;
+        message += `${videoNumber}- ${title}:\n ${url}\n\n`;
     });
 
     bot.sendMessage(chatId, message);
