@@ -2,13 +2,16 @@ const TelegramBot = require("node-telegram-bot-api");
 const axios = require('axios');
 const { google } = require('googleapis');
 const youtube = google.youtube('v3');
+const ytdl = require('ytdl-core');
+const fs = require('fs');
 require("dotenv").config();
+
 const token = process.env.TELEGRAM_TOKEN;
 const developerChatId = process.env.DEVELOPER_CHAT_ID;
 const bot = new TelegramBot(token, { polling: true });
 const keep_alive = require("./keep_alive.js");
 const weatherApiKey = process.env.WEATHER_API_KEY;
-const API_KEY = process.env.YOUTUBE_API_KEY;
+const youtubeApiKey = process.env.YOUTUBE_API_KEY;
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
@@ -34,24 +37,62 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const query = match[1];
 
-    const response = await youtube.search.list({
-        key: API_KEY,
-        part: 'snippet',
-        q: query,
-        maxResults: 10,
-    });
+    try {
+        const response = await youtube.search.list({
+            key: youtubeApiKey,
+            part: 'snippet',
+            q: query,
+            maxResults: 10,
+        });
 
-    const videos = response.data.items;
-    let videoNumber = 0;
-    let message = 'Top results:\n\n';
-    videos.forEach(video => {
-        const title = video.snippet.title;
+        const videos = response.data.items;
+        let videoNumber = 0;
+        let message = 'Top results:\n\n';
+        videos.forEach(video => {
+            const title = video.snippet.title;
+            const videoId = video.id.videoId;
+            const url = `https://www.youtube.com/watch?v=${videoId}`;
+            message += `${++videoNumber}- ${title}:\n ${url}\n\n`;
+        });
+
+        const video = response.data.items[0];
+        if (!video) {
+            bot.sendMessage(chatId, "No results found.");
+            return;
+        }
+
+        bot.sendMessage(chatId, message);
+
         const videoId = video.id.videoId;
-        const url = `https://www.youtube.com/watch?v=${videoId}`;
-        message += `${videoNumber}- ${title}:\n ${url}\n\n`;
-    });
+        const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+        const title = video.snippet.title;
 
-    bot.sendMessage(chatId, message);
+        // Notify the user that the video is being processed
+        bot.sendMessage(chatId, `Downloading "${title}"...`);
+
+        // Download the video using ytdl-core
+        const videoStream = ytdl(videoUrl, { format: 'mp4' });
+        const videoPath = `./${videoId}.mp4`;
+
+        videoStream.pipe(fs.createWriteStream(videoPath));
+
+        videoStream.on('end', () => {
+            // Send the video to the user
+            bot.sendVideo(chatId, videoPath, { caption: title })
+                .then(() => {
+                    // Delete the local video file after sending
+                    fs.unlinkSync(videoPath);
+                })
+                .catch(error => {
+                    console.error('Error sending video:', error);
+                    bot.sendMessage(chatId, 'Failed to send the video.');
+                });
+        });
+
+    } catch (error) {
+        console.error('Failed to download video:', error);
+        bot.sendMessage(chatId, 'Failed to download video.');
+    }
 });
 
 
