@@ -64,7 +64,7 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
         bot.sendMessage(chatId, message);
 
     } catch (error) {
-        console.log(error);
+        console.log('error occured while fetching videos data, error code: ' + error);
         bot.sendMessage(chatId, 'Sorry, something went wrong, try again later.');
     }
 });
