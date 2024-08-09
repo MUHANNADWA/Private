@@ -45,18 +45,30 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
             maxResults: 10,
         });
 
-        const videos = response.data.items;
-        let videoNumber = 0;
+        const items = response.data.items;
+        let itemNumber = 0;
         let message = 'Top results:\n\n';
-        videos.forEach(video => {
-            const title = video.snippet.title;
-            const videoId = video.id.videoId == undefined ? video.snippet.resourceId.videoId + video.id.playlistId : video.id.videoId;
-            const url = `https://www.youtube.com/watch?v=${videoId}`;
-            message += `${++videoNumber}- ${title}:\n ${url}\n\n`;
+
+        items.forEach(item => {
+            if (item.id.kind === 'youtube#video') { // Check if the item is a video
+                const title = item.snippet.title;
+                const videoId = item.id.videoId;
+                const url = `https://www.youtube.com/watch?v=${videoId}`;
+                message += `${++itemNumber}- ${title}:\n ${url}\n\n`;
+            } else if (item.id.kind === 'youtube#playlist') {
+                const title = item.snippet.title;
+                const playlistId = item.id.playlistId;
+                const url = `https://www.youtube.com/playlist?list=${playlistId}`;
+                message += `${++itemNumber}- ${title} (Playlist):\n ${url}\n\n`;
+            } else if (item.id.kind === 'youtube#channel') {
+                const title = item.snippet.title;
+                const channelId = item.id.channelId;
+                const url = `https://www.youtube.com/channel/${channelId}`;
+                message += `${++itemNumber}- ${title} (Channel):\n ${url}\n\n`;
+            }
         });
 
-        const video = response.data.items[0];
-        if (!video) {
+        if (itemNumber === 0) {
             bot.sendMessage(chatId, "No results found.");
             return;
         }
@@ -64,8 +76,8 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
         bot.sendMessage(chatId, message);
 
     } catch (error) {
-        console.log('error occured while fetching videos data, error code: ' + error);
-        bot.sendMessage(chatId, 'Sorry, something went wrong, try again later.');
+        bot.sendMessage(chatId, 'An error occurred while fetching video data: ' + error.message);
+        bot.sendMessage(chatId, 'Sorry, something went wrong. Please try again later.');
     }
 });
 
