@@ -63,35 +63,9 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
 
         bot.sendMessage(chatId, message);
 
-        const videoId = video.id.videoId;
-        const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-        const title = video.snippet.title;
-
-        // Notify the user that the video is being processed
-        bot.sendMessage(chatId, `Downloading "${title}"...`);
-
-        // Download the video using ytdl-core
-        const videoStream = ytdl(videoUrl, { format: 'mp4' });
-        const videoPath = `./${videoId}.mp4`;
-
-        videoStream.pipe(fs.createWriteStream(videoPath));
-
-        videoStream.on('end', () => {
-            // Send the video to the user
-            bot.sendVideo(chatId, videoPath, { caption: title })
-                .then(() => {
-                    // Delete the local video file after sending
-                    fs.unlinkSync(videoPath);
-                })
-                .catch(error => {
-                    console.error('Error sending video:', error);
-                    bot.sendMessage(chatId, 'Failed to send the video.');
-                });
-        });
-
     } catch (error) {
-        console.error('Failed to download video:', error);
-        bot.sendMessage(chatId, 'Failed to download video.');
+        console.log(error);
+        bot.sendMessage(chatId, 'Sorry, something went wrong, try again later.');
     }
 });
 
