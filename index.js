@@ -50,7 +50,7 @@ bot.onText(/\/search (.+)/, async (msg, match) => {
         let message = 'Top results:\n\n';
         videos.forEach(video => {
             const title = video.snippet.title;
-            const videoId = video.id.videoId == undefined ? video.data.items[0].id.videoId + video.id.playlistId : video.id.videoId;
+            const videoId = video.id.videoId == undefined ? video.snippet.resourceId.videoId + video.id.playlistId : video.id.videoId;
             const url = `https://www.youtube.com/watch?v=${videoId}`;
             message += `${++videoNumber}- ${title}:\n ${url}\n\n`;
         });
