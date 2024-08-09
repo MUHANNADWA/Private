@@ -13,10 +13,16 @@ const keep_alive = require("./keep_alive.js");
 const weatherApiKey = process.env.WEATHER_API_KEY;
 const youtubeApiKey = process.env.YOUTUBE_API_KEY;
 
+const startMessage = `welcome jiji you can use the following commands:
+/weather <city> to show its weather,
+/search <video> to search youtube,
+this is an example:`;
+
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
-    await bot.sendMessage(chatId, 'welcome jiji use the command (/weather city) to show its weather, this is an example:');
-    await bot.sendMessage(chatId, '/weather damascus');
+    await bot.sendMessage(chatId, startMessage);
+    await bot.sendMessage(chatId, '/weather Damascus');
+    await bot.sendMessage(chatId, '/search Html');
 });
 
 bot.onText(/\/weather (.+)/, async (msg, match) => {
