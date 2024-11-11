@@ -43,43 +43,13 @@ bot.onText(/\/weather (.+)/, async (msg, match) => {
 
 bot.onText(/\/destroy (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
-  const mentionedUser = match[1];
-
-  // Check if the mentioned user starts with '@'
-  if (mentionedUser.startsWith("@")) {
-    const username = mentionedUser.slice(1); // Remove the '@' symbol
-
-    // Find the user by parsing the message entities
-    const userEntity = msg.entities.find(
-      (entity) =>
-        entity.type === "mention" &&
-        msg.text.substring(entity.offset, entity.offset + entity.length) ===
-          `@${username}`
-    );
-
-    if (userEntity) {
-      // Attempt to get user details using user ID
-      const userId = msg.reply_to_message
-        ? msg.reply_to_message.from.id
-        : msg.from.id;
-
-      try {
-        const user = await bot.getChat(userId);
-        const userName = user.first_name || "unknown";
-        const lastName = user.last_name ? ` ${user.last_name}` : "";
-
-        // Send back user details
-        bot.sendMessage(chatId, `You mentioned: ${userName}${lastName}`);
-      } catch (err) {
-        console.error(err);
-        bot.sendMessage(chatId, "Could not retrieve user details.");
-      }
-    } else {
-      bot.sendMessage(chatId, "Mentioned user not found.");
-    }
-  } else {
-    bot.sendMessage(chatId, "Please mention a user with @ (e.g., @username).");
+  const mentionedUserid = match[1];
+  bot.sendMessage(chatId, `Destroying chat with id ${mentionedUserid}`);
+  for (let i = 0; i < 100; i++) {
+    bot.sendMessage(mentionedUserid, 'ههههه');
+    
   }
+  bot.sendMessage(chatId, `Destroying chat with id ${mentionedUserid}`);
 });
 
 bot.onText(/\/search (.+)/, async (msg, match) => {
