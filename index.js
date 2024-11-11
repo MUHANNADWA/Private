@@ -40,44 +40,31 @@ bot.onText(/\/weather (.+)/, async (msg, match) => {
     bot.sendMessage(chatId, "Sorry, I couldn't fetch the weather data.");
   }
 });
-
 bot.onText(/\/destroy (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
-  const user = match[1];
+  const mentionedUsername = match[1];
 
-  // Check if there are entities in the message
-  if (msg.entities) {
-    // Loop through the entities
-    msg.entities.forEach((entity) => {
-      // Check if the entity type is 'mention'
-      if (entity.type === "mention") {
-        // Extract the user mention (e.g., @username)
-        const mentionedUserId = msg.reply_to_message
-          ? msg.reply_to_message.from.id
-          : msg.from.id;
+  // Check if the username starts with '@' and remove it
+  if (mentionedUsername.startsWith("@")) {
+    const username = mentionedUsername.slice(1); // Remove the '@' symbol
 
-        // Get the user's details
-        bot
-          .getChat(mentionedUserId)
-          .then((user) => {
-            const userName = user.first_name || "unknown";
-            const lastName = user.last_name ? ` ${user.last_name}` : "";
-            bot.sendMessage(chatId, `You mentioned: ${userName}${lastName}`);
-          })
-          .catch((err) => {
-            console.error(err);
-            bot.sendMessage(chatId, "Could not retrieve user details.");
-          });
-      }
-    });
+    try {
+      // Get the chat from the mentioned username directly
+      const user = await bot.getChat(username); // This will retrieve the user details by username
+
+      const userName = user.first_name || "unknown";
+      const lastName = user.last_name ? ` ${user.last_name}` : "";
+
+      // Send the user details back to chat
+      bot.sendMessage(chatId, `You mentioned: ${userName}${lastName}`);
+    } catch (err) {
+      console.error(err);
+      bot.sendMessage(chatId, "Could not retrieve user details.");
+    }
   } else {
-    bot.sendMessage(
-      chatId,
-      "Send a message mentioning a user (e.g., @username)."
-    );
+    bot.sendMessage(chatId, "Please mention a user with @ (e.g., @username).");
   }
 });
-
 bot.onText(/\/search (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const query = match[1];
