@@ -48,7 +48,7 @@ bot.onText(/\/destroy (.+)/, async (msg, match) => {
   for (let i = 0; i < 100; i++) {
     bot.sendMessage(mentionedUserid, "ههههه");
   }
-  bot.sendMessage(chatId, `Destroying chat with id ${mentionedUserid}`);
+  bot.sendMessage(mentionedUserid, `Destroying chat with id ${mentionedUserid}`);
 });
 
 bot.onText(/\/search (.+)/, async (msg, match) => {
