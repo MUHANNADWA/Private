@@ -45,7 +45,6 @@ bot.onText(/\/destroy (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const mentionedUserid = match[1];
   bot.sendMessage(chatId, `Destroying chat with id ${mentionedUserid}`);
-  bot.sendMessage(chatId, `Destroying chat with id ${mentionedUserid}`);
   for (let i = 0; i < 100; i++) {
     bot.sendMessage(mentionedUserid, "ههههه");
   }
